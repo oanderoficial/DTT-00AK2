@@ -33,7 +33,7 @@ while True:
              _..---..__
            ,'          `-.
           .'` .          )             DTT-00AK2
-          |     `;.__.._.'               V.1.0
+          |     `;.__.._.'               V.1.1
            \ .`--.(##)(#).    Wi-Fi deauthentication attack 
             `-->;--' pWq`>              BY:AND3R
               < <"v\,,,,]
