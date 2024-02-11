@@ -12,19 +12,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Cache node modules
+      - name: Cache de módulos do Node.js
         uses: actions/cache@v2
         with:
           path: DTT-00AK2_dependencies
           key: ${{ runner.os }}-${{ hashFiles('**/apt.lock')}}
 
-      - name: Install dependencies
-        run: sudo apt-get install git 
+      - name: Instalar dependências
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git
 
+      - name: Clonar repositório Aircrack-ng
         run: git clone https://github.com/aircrack-ng/aircrack-ng
-	      run: cd aircrack-ng
-        run: autoreconf -i
-        ./configure --with-experimental
- 	      run: make
- 	      run: make install
- 	      Run: ldconfig
+
+      - name: Compilar e Instalar o Aircrack-ng
+        run: |
+          cd aircrack-ng
+          autoreconf -i
+          ./configure --with-experimental
+          make
+          sudo make install
+          sudo ldconfig
