@@ -19,11 +19,12 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/apt.lock')}}
 
       - name: Install dependencies
-        run: wget https://download.aircrack-ng.org/aircrack-ng-1.7.tar.gz
-	      run: tar -zxvf aircrack-ng-1.7.tar.gz
-	      run: cd aircrack-ng-1.7
- 	      run: autoreconf -i
- 	      run: ./configure --with-experimental
+        run: sudo apt-get install git 
+
+        run: git clone https://github.com/aircrack-ng/aircrack-ng
+	      run: cd aircrack-ng
+        run: autoreconf -i
+        ./configure --with-experimental
  	      run: make
  	      run: make install
  	      Run: ldconfig
