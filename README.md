@@ -14,7 +14,9 @@ Automatizei com python alguns processos do aircrack-ng. DTT-00AK2 tem como foco 
                `\`^-''''7
                  `~"--^-'
 
-```pyhon
+````
+
+```python
 
 import os
 
