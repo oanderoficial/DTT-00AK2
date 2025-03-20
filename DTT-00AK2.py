@@ -1,4 +1,5 @@
 import os
+import platform
 
 class WifiAttackTool:
     RED = '\033[91m'
@@ -7,64 +8,67 @@ class WifiAttackTool:
     RESET = '\033[0m'
 
     def __init__(self):
-        pass
+        self.is_mac = self.is_macos()
 
-    def start_monitor_mode(self):
-        os.system("airmon-ng")
-        interface = input("Digite aqui qual interface utilizar: ")
-        os.system(f"airmon-ng start {interface}")
+    def is_macos(self):
+        """Verifica se o sistema operacional é macOS."""
+        return platform.system() == "Darwin"
 
-    def analyze_wifi_traffic(self):
-        interface = input(self.GREEN + "Digite a interface: " + self.RESET)
-        os.system(f'xterm -e airodump-ng "{interface}"')
-        os.system('clear')
+    def scan_wifi_networks(self):
+        """Escaneia redes Wi-Fi disponíveis usando 'airport' no macOS."""
+        if self.is_mac:
+            print(self.GREEN + "Escaneando redes Wi-Fi..." + self.RESET)
+            os.system("airport -s")
+        else:
+            print(self.RED + "Este comando só funciona no macOS." + self.RESET)
 
-    def filter_results_by_bssid(self):
-        channel = input(self.GREEN + "Digite o canal: " + self.RESET)
-        bssid = input(self.GREEN + "Digite a BSSID: " + self.RESET)
-        interface = input(self.GREEN + "Digite a interface: " + self.RESET)
-        os.system('clear')
-        os.system(f'xterm -e airodump-ng -c {channel} --bssid {bssid} {interface}')
-        os.system('clear')
+    def capture_wifi_traffic(self):
+        """Captura tráfego de rede usando tcpdump (alternativa ao airodump-ng)."""
+        if self.is_mac:
+            interface = input(self.GREEN + "Digite a interface de rede (ex: en0): " + self.RESET)
+            print(self.GREEN + f"Iniciando captura de tráfego na interface {interface}..." + self.RESET)
+            os.system(f"sudo tcpdump -i {interface} -I -y IEEE802_11_RADIO")
+        else:
+            print(self.RED + "Este comando só funciona no macOS." + self.RESET)
 
     def perform_deauthentication_attack(self):
-        bssid = input(self.GREEN + "Digite a BSSID: " + self.RESET)
-        interface = input(self.GREEN + "Digite a interface: " + self.RESET)
-        os.system(f'xterm -e aireplay-ng --deauth 0 -a {bssid} {interface}')
+        """Simula um ataque de desautenticação (não suportado nativamente no macOS)."""
+        if self.is_mac:
+            print(self.RED + "Atenção: Ataques de desautenticação não são suportados nativamente no macOS." + self.RESET)
+            print(self.YELLOW + "Você precisará de um adaptador USB Wi-Fi compatível com modo monitor." + self.RESET)
+        else:
+            print(self.RED + "Este comando só funciona no Linux." + self.RESET)
 
     def run(self):
+        """Menu principal do script."""
         while True:
             print(self.RED + """
                      _..---..__
                    ,'          `-.
                   .'` .          )             DTT-00AK2
                   |     `;.__.._.'               V.1.1
-                   \ .`--.(##)(#).    Wi-Fi deauthentication attack 
+                   \ .`--.(##)(#).    Wi-Fi Analysis Tool for macOS
                     `-->;--' pWq`>              BY:AND3R
                       < <"v\,,,,]
                        `\`^-''''7
                          `~"--^-'
             """ + self.RESET)
-            print(self.RED + "1- [airmon-ng] Colocar a interface em modo monitor" + self.RESET)
-            print(self.YELLOW + "2- [airodump-ng] Analisar o tráfego de redes sem fio" + self.RESET)
-            print(self.RED + "3- [airodump-ng] Filtrar os resultados pelo BSSID" + self.RESET)
-            print(self.YELLOW + "4- [aireplay-ng] Realizar ataque no ponto de acesso (AP)" + self.RESET)
-            print(self.RED + "5- Sair" + self.RESET)
-
+            print(self.RED + "1- Escanear redes Wi-Fi disponíveis" + self.RESET)
+            print(self.YELLOW + "2- Capturar tráfego de rede (modo monitor)" + self.RESET)
+            print(self.RED + "3- Realizar ataque de desautenticação (não suportado no macOS)" + self.RESET)
+            print(self.YELLOW + "4- Sair" + self.RESET)
             menu = input(self.RED + "Digite uma opção >> " + self.RESET)
 
             if menu == "1":
-                self.start_monitor_mode()
+                self.scan_wifi_networks()
             elif menu == "2":
-                self.analyze_wifi_traffic()
+                self.capture_wifi_traffic()
             elif menu == "3":
-                self.filter_results_by_bssid()
-            elif menu == "4":
                 self.perform_deauthentication_attack()
-            elif menu == "5":
+            elif menu == "4":
                 break
             else:
-                print("Opção inválida")
+                print(self.RED + "Opção inválida!" + self.RESET)
 
 if __name__ == "__main__":
     tool = WifiAttackTool()
