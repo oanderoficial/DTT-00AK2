@@ -21,6 +21,7 @@ Automatizei com python alguns processos do aircrack-ng. DTT-00AK2 tem como foco 
 import os
 
 class WifiAttackTool:
+    #colors
     RED = '\033[91m'
     YELLOW = '\033[93m'
     GREEN = '\033[92m'
@@ -89,6 +90,7 @@ class WifiAttackTool:
 if __name__ == "__main__":
     tool = WifiAttackTool()
     tool.run()
+
 
 ```
 
